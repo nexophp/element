@@ -1,0 +1,24 @@
+{
+    "name": "nexophp/element",
+    "type": "library",
+    "description": "vue element table form",
+    "keywords": ["php"],
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+           "name": "sunkangchina",
+           "email":"68103403@qq.com"
+        }
+    ],
+    "require": {  
+        
+    },
+    "autoload": { 
+        "files": [ 
+            "./helper.php"
+        ],
+        "psr-4": {
+            "element\\": "./"
+        }
+    }
+}
