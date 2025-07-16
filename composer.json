@@ -3,7 +3,7 @@
     "type": "library",
     "description": "vue element table form",
     "keywords": ["php"],
-    "license": "BSD-3-Clause",
+    "license": "MIT",
     "authors": [
         {
            "name": "sunkangchina",
