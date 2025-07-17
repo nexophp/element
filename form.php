@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * 表单类
+ * @author sunkangchina <68103403@qq.com>
+ * @license MIT <https://mit-license.org/>
+ * @date 2025
+ */
+
 namespace element;
 
 class form
@@ -54,8 +61,8 @@ class form
             include $file;
             $content = ob_get_contents();
             ob_end_clean();
-        }else{
-            return $v['html']??'';
+        } else {
+            return $v['html'] ?? '';
         }
         return $content;
     }
