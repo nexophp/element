@@ -53,12 +53,12 @@ if($multiple){
                     <img :src="v" style="width:100px;height: 100px;">
                     <div @click="<?=$upload_remove['method']?>(k)" class="remove_link hand"
                         style="position: absolute;bottom: 0px;text-align: center;color: #FFF;width: 100%;font-size: 10px;">
-                        删除</div>
+                        <?=lang('删除')?></div>
                     <?php }else{?>
                     {{v}}
                     <div @click="<?=$upload_remove['method']?>(k)" class="remove_link hand"
                         style="position: absolute;bottom: 0px;text-align: center;color: #FFF;width: 100%;font-size: 10px;">
-                        删除</div>
+                        <?=lang('删除')?></div>
                     <?php }?>
                 </div>
             </div>
@@ -70,7 +70,7 @@ if($multiple){
                 <img :src="<?=$model?>.<?=$show_image_thumb_field?>" style="width:100px;height: 100px;">
                 <div @click="<?=$upload_remove['method']?>(0)" class="remove_link hand"
                     style="position: absolute;bottom: 0px;text-align: center;color: #FFF;width: 100%;font-size: 10px;">
-                    删除</div>
+                    <?=lang('删除')?></div>
                 <?php }else{?>
                 <span class="link hand" :title="<?=$model?>.<?=$name?>" v-if="get_ext(<?=$model?>.<?=$name?>) == 'pdf'"
                     @click="open_pdf(<?=$model?>.<?=$name?>)" >
@@ -106,7 +106,7 @@ if($multiple){
                 </span> 
                 <div @click="<?=$upload_remove['method']?>(0)" class="remove_link hand"
                     style="position: absolute;bottom: 0px;text-align: center;color: #FFF;width: 100%;font-size: 10px;">
-                    删除</div>
+                    <?=lang('删除')?></div>
                 <?php }?>
             </div>
             <?php }?>
