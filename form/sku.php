@@ -20,34 +20,34 @@ if($attr && is_array($attr) && in_array('status',$attr)){
 ?>
 <el-form-item label="<?=$label?>"> 
     <div style="display: flex;margin-top: 15px;"> 
-        <el-radio v-model="<?=$model?>.<?=$select_name?>" label="1">单规格</el-radio>
-        <el-radio style="margin-left: 10px;" v-model="<?=$model?>.<?=$select_name?>" label="2">多规格</el-radio>
+        <el-radio v-model="<?=$model?>.<?=$select_name?>" label="1"><?=lang('单规格')?></el-radio>
+        <el-radio style="margin-left: 10px;" v-model="<?=$model?>.<?=$select_name?>" label="2"><?=lang('多规格')?></el-radio>
     </div>
     <div v-if="<?=$model?>.<?=$select_name?> == 1">
         <el-form label-position="top" @submit.native.prevent label-width="180px" style="padding-right:20px;">
-            <el-form-item label="划线价" required>
+            <el-form-item label="<?=lang('划线价')?>" required>
                 <el-input style="width:200px" v-model="<?=$model?>.price_mart" type="number"></el-input>
             </el-form-item>
-            <el-form-item label="销售价" required>
+            <el-form-item label="<?=lang('销售价')?>" required>
                 <el-input style="width:200px" v-model="<?=$model?>.price" type="number"></el-input>
             </el-form-item>
             <?php if($is_stock){?>
-            <el-form-item label="库存" required>
+            <el-form-item label="<?=lang('库存')?>" required>
                 <el-input style="width:200px" v-model="<?=$model?>.stock" type="number"></el-input>
             </el-form-item>
             <?php }?>
         </el-form>
     </div>
 
-    <table v-if="<?=$model?>.<?=$select_name?> == 2" style="width:100%;" class="pure-table pure-table-bordered">
+    <table v-if="<?=$model?>.<?=$select_name?> == 2" style="width:100%;margin-top:5px;" class="table table-bordered">
         <thead>
             <tr>
-                <th>规格名(<span @click="push_spec('<?=$name?>')" class="hand link">+</span>)</th>
-                <?php if($is_image){?><th>图片</th><?php }?>
+                <th><?=lang('规格名')?>(<span @click="push_spec('<?=$name?>')" class="hand link">+</span>)</th>
+                <?php if($is_image){?><th><?=lang('图片')?></th><?php }?>
                 <th>价格</th>
-                <?php if($is_stock){?><th>库存</th><?php }?>
-                <?php if($is_status){?><th style="width:50px;">状态</th><?php }?>
-                <th style="width:50px;">操作</th>
+                <?php if($is_stock){?><th><?=lang('库存')?></th><?php }?>
+                <?php if($is_status){?><th style="width:50px;"><?=lang('状态')?></th><?php }?>
+                <th style="width:50px;"><?=lang('操作')?></th>
             </tr>
         </thead>
         <tbody>
@@ -62,9 +62,9 @@ if($attr && is_array($attr) && in_array('status',$attr)){
                         <el-image style="width: 50px; height:50px" v-if="<?=$model?>.<?=$name?>[index].img"
                             :src="<?=$model?>.<?=$name?>[index].img"></el-image>
                         <a v-if="<?=$model?>.<?=$name?>[index].img" href="javascript:void(0);" class="hand link ml10"
-                            @click="upload_spec('<?=$name?>',index)" title="替换">替换</a>
+                            @click="upload_spec('<?=$name?>',index)" title="<?=lang('替换')?>"><?=lang('替换')?></a>
                         <a v-else href="javascript:void(0);" class="hand link ml10"
-                            @click="upload_spec('<?=$name?>',index)" title="上传">上传</a>
+                            @click="upload_spec('<?=$name?>',index)" title="<?=lang('上传')?>"><?=lang('上传')?></a>
                     </div>
                 </td>
                 <?php }?>
