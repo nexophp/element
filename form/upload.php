@@ -141,15 +141,15 @@ if($multiple){
         if(!_this.".$model.".".$name."_thumb){
           _this.".$model.".".$name."_thumb = [];
         }
-        _this.".$model.".".$name."_thumb.push(res.data[0]);
+        _this.".$model.".".$name."_thumb.push(res.data.url);
         "; 
     }
-    $string .= "_this.".$model.".".$name.".push(res.data[0]);"; 
+    $string .= "_this.".$model.".".$name.".push(res.data.url);"; 
 }else{
     if($thumb){
-      $string = "_this.".$model.".".$name."_thumb = res.data[0];"; 
+      $string = "_this.".$model.".".$name."_thumb = res.data.url;"; 
     }
-    $string .= "_this.".$model.".".$name." = res.data[0];"; 
+    $string .= "_this.".$model.".".$name." = res.data.url;"; 
 }
 $vue->method($upload_success['method']."(res,f,files)","js:
     _this.full_loading.close();
