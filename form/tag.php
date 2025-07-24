@@ -7,7 +7,7 @@
     <?php  if($v['append']) {?><?=$v['append']?><?php }?>
 </el-form-item>
 <?php
-$vue->data_form($name, "js:['']");
+$vue->formData($name, "js:['']");
 $vue->method("push_tag(field)", "js: 
 	this.".$model."[field].push('');
 ");

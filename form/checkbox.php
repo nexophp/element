@@ -12,5 +12,5 @@
     <?php }?>
 </el-form-item> 
 <?php 
-$vue->data_form($name, "[]"); 
+$vue->formData($name, "[]"); 
 ?>

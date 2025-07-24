@@ -16,7 +16,7 @@ class form
     public static function create($arr = [])
     {
         global $vue;
-        $vue->add_date();
+        $vue->addDate();
         $str = '';
         foreach ($arr as $v) {
             if ($v['type'] == 'open') {

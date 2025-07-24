@@ -30,7 +30,7 @@
 $default = "[
 	{name:'',values:''}, 
 ]";
-$vue->data_form($name,"");
+$vue->formData($name,"");
  
 $vue->method("form_push_attr(field)","
 	if(!this.".$model."[field]){

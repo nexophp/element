@@ -94,7 +94,7 @@ if ($attr && is_array($attr) && in_array('status', $attr)) {
     </table>
 </el-form-item>
 <?php
-$vue->data_form($name, "[
+$vue->formData($name, "[
     {spec_name:'',price:'',stock:'',status:'1'}, 
 ]");
 $vue->method("push_spec(field)", " 
