@@ -27,93 +27,95 @@ if($multiple){
 ?>
 
 <el-form-item label="<?=$label?>" <?=$item_attr?>> 
-    <div style="display: flex; margin-top: 10px;">
-        <?php if($v['sortable'] && $v['multiple']){?>
-        <draggable v-if="<?=$model?>.<?=$name?>" style="display: flex;flex-wrap: wrap;" v-model="<?=$model?>.<?=$name?>"
-            @start="drag=true" @end="drag=false">
-            <?php }?>
-            <?php 
-        $show_image_thumb_field = $name;
-        if($thumb){
-          $show_image_thumb_field =  $name.'_thumb';
-        }
-        if($v['multiple']){
-            //多文件显示
+    <div style="display: block;clear: both;" >
+        <div style="display: flex; margin-top: 10px;">
+            <?php if($v['sortable'] && $v['multiple']){?>
+            <draggable v-if="<?=$model?>.<?=$name?>" style="display: flex;flex-wrap: wrap;" v-model="<?=$model?>.<?=$name?>"
+                @start="drag=true" @end="drag=false">
+                <?php }?>
+                <?php 
+            $show_image_thumb_field = $name;
+            if($thumb){
+            $show_image_thumb_field =  $name.'_thumb';
+            }
+            if($v['multiple']){
+                //多文件显示
 
-          ?>
-            <div style="margin-right:5px;position: relative;" v-for="(v,k) in <?=$model?>.<?=$show_image_thumb_field?>">
-                <div style="position: relative;">
-                    <?php if($v['show_type'] == 'image'){ 
-                ?>
-                    <img :src="v" style="width:100px;height: 100px;">
-                    <div @click="<?=$upload_remove['method']?>(k)" class="remove_link hand"
+            ?>
+                <div style="margin-right:5px;position: relative;" v-for="(v,k) in <?=$model?>.<?=$show_image_thumb_field?>">
+                    <div style="position: relative;">
+                        <?php if($v['show_type'] == 'image'){ 
+                    ?>
+                        <img :src="v" style="width:100px;height: 100px;">
+                        <div @click="<?=$upload_remove['method']?>(k)" class="remove_link hand"
+                            style="position: absolute;bottom: 0px;text-align: center;color: #FFF;width: 100%;font-size: 10px;">
+                            <?=lang('删除')?></div>
+                        <?php }else{?>
+                        {{v}}
+                        <div @click="<?=$upload_remove['method']?>(k)" class="remove_link hand"
+                            style="position: absolute;bottom: 0px;text-align: center;color: #FFF;width: 100%;font-size: 10px;">
+                            <?=lang('删除')?></div>
+                        <?php }?>
+                    </div>
+                </div>
+                <?php }else{
+                //单个文件显示
+            ?>
+                <div style="position: relative;" v-if="<?=$model?>.<?=$name?>">
+                    <?php if($v['show_type'] == 'image'){?>
+                    <img :src="<?=$model?>.<?=$show_image_thumb_field?>" style="width:100px;height: 100px;">
+                    <div @click="<?=$upload_remove['method']?>(0)" class="remove_link hand"
                         style="position: absolute;bottom: 0px;text-align: center;color: #FFF;width: 100%;font-size: 10px;">
                         <?=lang('删除')?></div>
                     <?php }else{?>
-                    {{v}}
-                    <div @click="<?=$upload_remove['method']?>(k)" class="remove_link hand"
+                    <span class="link hand" :title="<?=$model?>.<?=$name?>" v-if="get_ext(<?=$model?>.<?=$name?>) == 'pdf'"
+                        @click="open_pdf(<?=$model?>.<?=$name?>)" >
+                        <img @click="open_pdf(<?=$model?>.<?=$name?>)" src="<?=cdn()?>/misc/img/pdf.png" style="width:100px;height: 100px;">
+                    </span>
+
+                    <span class="link hand" :title="<?=$model?>.<?=$name?>" v-if="get_ext(<?=$model?>.<?=$name?>) == 'xls' || get_ext(<?=$model?>.<?=$name?>) == 'xlsx'"
+                        @click="open_office(<?=$model?>.<?=$name?>)" >
+                        <img @click="open_office(<?=$model?>.<?=$name?>)" src="<?=cdn()?>/misc/img/xls.png" style="width:100px;height: 100px;">
+                    </span>
+
+
+                    <span class="link hand" :title="<?=$model?>.<?=$name?>" v-if="get_ext(<?=$model?>.<?=$name?>) == 'doc' || get_ext(<?=$model?>.<?=$name?>) == 'docx'"
+                        @click="open_office(<?=$model?>.<?=$name?>)" >
+                        <img @click="open_office(<?=$model?>.<?=$name?>)" src="<?=cdn()?>/misc/img/doc.png" style="width:100px;height: 100px;">
+                    </span>
+
+                    <span class="link hand" :title="<?=$model?>.<?=$name?>" v-if="get_ext(<?=$model?>.<?=$name?>) == 'ppt' || get_ext(<?=$model?>.<?=$name?>) == 'pptx'"
+                        @click="open_office(<?=$model?>.<?=$name?>)" >
+                        <img @click="open_office(<?=$model?>.<?=$name?>)" src="<?=cdn()?>/misc/img/ppt.png" style="width:100px;height: 100px;">
+                    </span>
+
+
+                    <span class="link hand" :title="<?=$model?>.<?=$name?>"
+                        v-else-if="get_ext(<?=$model?>.<?=$name?>) == 'png' ||get_ext(<?=$model?>.<?=$name?>) == 'jpg' || get_ext(form.<?=$name?>) == 'gif' || get_ext(<?=$model?>.<?=$name?>) == 'webp' || get_ext(<?=$model?>.<?=$name?>) == 'bmp' || get_ext(form.<?=$name?>) == 'jpeg'     ">
+                        <img :src="<?=$model?>.<?=$name?>" style="width:100px;height: 100px;">
+                    </span>
+    
+
+                    <span class="link hand" :title="<?=$model?>.<?=$name?>"
+                        v-else-if="get_ext(<?=$model?>.<?=$name?>) == 'mp4' || get_ext(<?=$model?>.<?=$name?>) == 'webp'">
+                        <video :src="form.<?=$name?>" style="width:100px;height: 100px;background: #000;"></video>
+                    </span> 
+                    <div @click="<?=$upload_remove['method']?>(0)" class="remove_link hand"
                         style="position: absolute;bottom: 0px;text-align: center;color: #FFF;width: 100%;font-size: 10px;">
                         <?=lang('删除')?></div>
                     <?php }?>
                 </div>
-            </div>
-            <?php }else{
-            //单个文件显示
-          ?>
-            <div style="position: relative;" v-if="<?=$model?>.<?=$name?>">
-                <?php if($v['show_type'] == 'image'){?>
-                <img :src="<?=$model?>.<?=$show_image_thumb_field?>" style="width:100px;height: 100px;">
-                <div @click="<?=$upload_remove['method']?>(0)" class="remove_link hand"
-                    style="position: absolute;bottom: 0px;text-align: center;color: #FFF;width: 100%;font-size: 10px;">
-                    <?=lang('删除')?></div>
-                <?php }else{?>
-                <span class="link hand" :title="<?=$model?>.<?=$name?>" v-if="get_ext(<?=$model?>.<?=$name?>) == 'pdf'"
-                    @click="open_pdf(<?=$model?>.<?=$name?>)" >
-                    <img @click="open_pdf(<?=$model?>.<?=$name?>)" src="<?=cdn()?>/misc/img/pdf.png" style="width:100px;height: 100px;">
-                </span>
-
-                <span class="link hand" :title="<?=$model?>.<?=$name?>" v-if="get_ext(<?=$model?>.<?=$name?>) == 'xls' || get_ext(<?=$model?>.<?=$name?>) == 'xlsx'"
-                    @click="open_office(<?=$model?>.<?=$name?>)" >
-                    <img @click="open_office(<?=$model?>.<?=$name?>)" src="<?=cdn()?>/misc/img/xls.png" style="width:100px;height: 100px;">
-                </span>
-
-
-                <span class="link hand" :title="<?=$model?>.<?=$name?>" v-if="get_ext(<?=$model?>.<?=$name?>) == 'doc' || get_ext(<?=$model?>.<?=$name?>) == 'docx'"
-                    @click="open_office(<?=$model?>.<?=$name?>)" >
-                    <img @click="open_office(<?=$model?>.<?=$name?>)" src="<?=cdn()?>/misc/img/doc.png" style="width:100px;height: 100px;">
-                </span>
-
-                <span class="link hand" :title="<?=$model?>.<?=$name?>" v-if="get_ext(<?=$model?>.<?=$name?>) == 'ppt' || get_ext(<?=$model?>.<?=$name?>) == 'pptx'"
-                    @click="open_office(<?=$model?>.<?=$name?>)" >
-                    <img @click="open_office(<?=$model?>.<?=$name?>)" src="<?=cdn()?>/misc/img/ppt.png" style="width:100px;height: 100px;">
-                </span>
-
-
-                <span class="link hand" :title="<?=$model?>.<?=$name?>"
-                    v-else-if="get_ext(<?=$model?>.<?=$name?>) == 'png' ||get_ext(<?=$model?>.<?=$name?>) == 'jpg' || get_ext(form.<?=$name?>) == 'gif' || get_ext(<?=$model?>.<?=$name?>) == 'webp' || get_ext(<?=$model?>.<?=$name?>) == 'bmp' || get_ext(form.<?=$name?>) == 'jpeg'     ">
-                    <img :src="<?=$model?>.<?=$name?>" style="width:100px;height: 100px;">
-                </span>
- 
-
-                <span class="link hand" :title="<?=$model?>.<?=$name?>"
-                    v-else-if="get_ext(<?=$model?>.<?=$name?>) == 'mp4' || get_ext(<?=$model?>.<?=$name?>) == 'webp'">
-                    <video :src="form.<?=$name?>" style="width:100px;height: 100px;background: #000;"></video>
-                </span> 
-                <div @click="<?=$upload_remove['method']?>(0)" class="remove_link hand"
-                    style="position: absolute;bottom: 0px;text-align: center;color: #FFF;width: 100%;font-size: 10px;">
-                    <?=lang('删除')?></div>
                 <?php }?>
-            </div>
+                <?php if($v['sortable'] && $v['multiple']){?>
+            </draggable>
             <?php }?>
-            <?php if($v['sortable'] && $v['multiple']){?>
-        </draggable>
-        <?php }?>
 
-        <el-upload action="<?=$url?>" :before-upload="<?=$upload_before['method']?>" class="element-upload"
-            accept="<?= lib\Mime::get($upload_success['mime'])?>" :on-success="<?=$upload_success['method']?>"
-            :show-file-list="false" <?=$attr_element?>>
-            <el-button type="text" class="link hand"><?=lang('上传文件')?></el-button>
-        </el-upload>
+            <el-upload action="<?=$url?>" :before-upload="<?=$upload_before['method']?>" class="element-upload"
+                accept="<?= lib\Mime::get($upload_success['mime'])?>" :on-success="<?=$upload_success['method']?>"
+                :show-file-list="false" <?=$attr_element?>>
+                <el-button type="text" class="link hand"><?=lang('上传文件')?></el-button>
+            </el-upload>
+        </div>
     </div>
     <?php  if($v['append']){?><?=$v['append']?><?php }?>
 </el-form-item>
