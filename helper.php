@@ -34,7 +34,7 @@ function element_vue()
 function element_open_pdf()
 {
 ?>
-    <div v-if="is_pdf" style="position:fixed;top: 0;left:-20px;width:70%;height: 100vh; z-index: 99999;">
+    <div v-if="is_pdf" style="position:fixed;top: 0;left:-20px;width:100%;height: 100vh; z-index: 99999;">
         <div style="position: relative;">
             <iframe :src="pdf_url" style="width:100%;height: 100vh;border:0px;"></iframe>
             <el-button @click="is_pdf = false" size="small" style="position:absolute;right: 130px;z-index: 999999;top:15px;">关闭</el-button>
