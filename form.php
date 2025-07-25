@@ -53,6 +53,8 @@ class form
             unset($v['size']);
             $url      = $v['url'] ?? '';
             unset($v['url']);
+            $num      = $v['num'] ?? '';
+            unset($v['num']);
             $item_attr     = element_to_str($attr);
             $attr_element  = element_to_str($attr_element);
             $attr_element_pre   = element_to_str($attr_element_pre);
