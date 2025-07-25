@@ -5,7 +5,7 @@
 
 
 <?php
-$vue->editor_method();
+$vue->editorMethod();
 $vue->mounted('we', "
 setTimeout(function(){
    app.weditor();
