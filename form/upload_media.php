@@ -4,9 +4,9 @@
     <div style="display: block;clear: both;" ></div>
     <?php  
     if($multiple){
-        echo vue_upload_all($name,'form');
+        echo vue_upload_images($name,'form');
     }else{
-        echo vue_upload_one($name,'form');
+        echo vue_upload_image($name,'form');
     }
     ?>
     <?php  if($v['append']){?><?=$v['append']?><?php }?>
