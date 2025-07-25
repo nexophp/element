@@ -8,13 +8,14 @@ if($v['index']) {
         $cascader_i++;
     }
 }
+ 
 $cascader_option = "cascader_option_".$cascader_i;
 $cascader_change = "cascader_change_".$cascader_i;
 $cascader_ajax = "cascader_ajax_".$cascader_i;
 ?>
-<el-form-item label="<?=$label?>" <?=$item_attr?>>
+<el-form-item label="<?=$label?>" <?=$item_attr?>> 
     <el-cascader style="width:100%;" @change="<?=$cascader_change?>" v-model="<?=$model ?: 'form'?>.<?=$name?>"
-        :options="<?=$cascader_option?>" <?=$attr_element?>></el-cascader>
+        :options="<?php if($options){ echo $options; }else{ echo $cascader_option; }?>" <?=$attr_element?>></el-cascader>
 </el-form-item>
 <?php
 if($v['value']) {
