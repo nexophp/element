@@ -1,7 +1,6 @@
  
 
-<el-form-item label="<?=$label?>" <?=$item_attr?>>   
-    <div style="display: block;clear: both;" ></div>
+<el-form-item label="<?=$label?>" <?=$item_attr?>>    
     <?php  
     if($multiple){
         echo vue_upload_images($name,'form');
