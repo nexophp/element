@@ -63,7 +63,7 @@ if ($attr && is_array($attr) && in_array('status', $attr)) {
                 </td>
                 <td>
                     <el-input style="width:200px;" size="small" 
-                        v-model="<?= $model ?>.<?= $name ?>[index].sli"
+                        v-model="<?= $model ?>.<?= $name ?>[index].sku"
                         @input="$forceUpdate()">
                     </el-input>
                 </td>
