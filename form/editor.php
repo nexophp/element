@@ -6,10 +6,16 @@
 
 <?php
 $vue->editorMethod();
-$vue->mounted('we', "
-setTimeout(function(){
-   app.weditor();
-},500);
+$vue->mounted('editor_mounted', " 
+if (document.querySelector('#".$name."weditor')) {
+    this.open_editor();
+}
 ");
-
+$vue->method("open_editor()", "
+    setTimeout(function(){
+        if (typeof app !== 'undefined' && app.weditor) {
+            app.weditor();
+        } 
+    }, 300);
+");
 ?>
