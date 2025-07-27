@@ -16,12 +16,12 @@ if ($attr && is_array($attr) && in_array('stock', $attr)) {
 $is_status = false;
 if ($attr && is_array($attr) && in_array('status', $attr)) {
     $is_status = true;
-}
+} 
 ?>
 <el-form-item label="<?= $label ?>">
     <div style="display: flex;margin-top: 15px;">
-        <el-radio v-model="<?= $model ?>.<?= $select_name ?>" label="1"><?= lang('单规格') ?></el-radio>
-        <el-radio style="margin-left: 10px;" v-model="<?= $model ?>.<?= $select_name ?>" label="2"><?= lang('多规格') ?></el-radio>
+        <el-radio @change="spec_change()" v-model="<?= $model ?>.<?= $select_name ?>" label="1"><?= lang('单规格') ?></el-radio>
+        <el-radio @change="spec_change()" style="margin-left: 10px;" v-model="<?= $model ?>.<?= $select_name ?>" label="2"><?= lang('多规格') ?></el-radio>
     </div>
     <div v-if="<?= $model ?>.<?= $select_name ?> == 1">
         <el-form label-position="top" @submit.native.prevent label-width="180px" style="padding-right:20px;">
@@ -42,7 +42,7 @@ if ($attr && is_array($attr) && in_array('status', $attr)) {
     <table v-if="<?= $model ?>.<?= $select_name ?> == 2" style="width:100%;margin-top:5px;" class="table table-bordered">
         <thead>
             <tr>
-                <th><?= lang('规格名') ?>(<span @click="push_spec('<?= $name ?>')" class="hand link">+</span>)</th>
+                <th><?= lang('规格名') ?>(<span @click="push_spec()" class="hand link">+</span>)</th>
                 <?php if ($is_image) { ?><th><?= lang('图片') ?></th><?php } ?>
                 <th><?= lang('价格') ?></th>
                 <?php if ($is_stock) { ?><th><?= lang('库存') ?></th><?php } ?>
@@ -53,15 +53,17 @@ if ($attr && is_array($attr) && in_array('status', $attr)) {
         <tbody>
             <tr v-for="(v,index) in <?= $model ?>.<?= $name ?>">
                 <td>
-                    <el-input style="width:200px;" size="small" v-model="<?= $model ?>.<?= $name ?>[index].spec_name">
+                    <el-input style="width:200px;" size="small" 
+                        v-model="<?= $model ?>.<?= $name ?>[index].title"
+                        @input="$forceUpdate()">
                     </el-input>
                 </td>
                 <?php if ($is_image) { ?>
                     <td>
                         <div style="display:flex;align-items: center;">
-                            <el-image style="width: 50px; height:50px" v-if="<?= $model ?>.<?= $name ?>[index].img"
-                                :src="<?= $model ?>.<?= $name ?>[index].img" :preview-src-list="[<?= $model ?>.<?= $name ?>[index].img]"></el-image>
-                            <a v-if="<?= $model ?>.<?= $name ?>[index].img" href="javascript:void(0);" class="hand link ml10"
+                            <el-image style="width: 50px; height:50px" v-if="<?= $model ?>.<?= $name ?>[index].image"
+                                :src="<?= $model ?>.<?= $name ?>[index].image" :preview-src-list="[<?= $model ?>.<?= $name ?>[index].image]"></el-image>
+                            <a v-if="<?= $model ?>.<?= $name ?>[index].image" href="javascript:void(0);" class="hand link ml10"
                                 @click="upload_spec('<?= $name ?>',index)" title="<?= lang('替换') ?>"><?= lang('替换') ?></a>
                             <a v-else href="javascript:void(0);" class="hand link ml10"
                                 @click="upload_spec('<?= $name ?>',index)" title="<?= lang('上传') ?>"><?= lang('上传') ?></a>
@@ -70,12 +72,14 @@ if ($attr && is_array($attr) && in_array('status', $attr)) {
                 <?php } ?>
                 <td>
                     <el-input style="width:200px;" size="small" type="number"
-                        v-model="<?= $model ?>.<?= $name ?>[index].price"></el-input>
+                        v-model="<?= $model ?>.<?= $name ?>[index].price"
+                        @input="$forceUpdate()"></el-input>
                 </td>
                 <?php if ($is_stock) { ?>
                     <td>
                         <el-input style="width:200px;" size="small" type="number"
-                            v-model="<?= $model ?>.<?= $name ?>[index].stock" style="width: 100px;"></el-input>
+                            v-model="<?= $model ?>.<?= $name ?>[index].stock"
+                            @input="$forceUpdate()" style="width: 100px;"></el-input>
                     </td>
                 <?php } ?>
                 <?php if ($is_status) { ?>
@@ -86,7 +90,7 @@ if ($attr && is_array($attr) && in_array('status', $attr)) {
                     </td>
                 <?php } ?>
                 <td>
-                    <el-button type="danger" size="small" @click="del_spec('<?= $name ?>',index)" icon="el-icon-delete"
+                    <el-button type="danger" size="small" @click="del_spec(index)" icon="el-icon-delete"
                         circle></el-button>
                 </td>
             </tr>
@@ -94,16 +98,37 @@ if ($attr && is_array($attr) && in_array('status', $attr)) {
     </table>
 </el-form-item>
 <?php
-$vue->formData($name, "[
-    {spec_name:'',price:'',stock:'',status:'1'}, 
-]");
-$vue->method("push_spec(field)", " 
-    this." . $model . "[field].push({spec_name:'',price:'',stock:'',status:'1'});
-");
-$vue->method("del_spec(field,index)", "
-    this." . $model . "[field].splice(index,1);
+ 
+$vue->method("update_spec()","
+    app.{$model}.{$name} = [
+        {title:'',price:'',stock:'',status:'1'}, 
+    ];
+    app.\$forceUpdate();
 ");
 
+$vue->method("push_spec()", "  
+    if(!app.{$model}.{$name}){
+        app.{$model}.{$name} = [];
+    }
+    app.{$model}.{$name}.push({title: '', price: '', stock: '', status: '1'});
+    app.\$forceUpdate();
+");
+
+$vue->method("del_spec(index)", "
+    app.{$model}.{$name}.splice(index,1);
+    app.\$forceUpdate();
+");
+
+$vue->method("spec_change()","  
+    if(app.{$model}.{$select_name} == 2 && !app.{$model}.{$name} ){ 
+        app.update_spec(); 
+    } 
+");
+
+// 添加新的方法来处理输入变化
+$vue->method("update_spec_field(index, field, value)", "
+    app.\$set(app.{$model}.{$name}[index], field, value);
+");
  
 $vue->data("upload_spec_index", '');
 $vue->data("upload_spec_field", '');
@@ -112,8 +137,8 @@ $js =  "
 parent.layer.closeAll();
 let field = parentVue.upload_spec_field;
 let index = parentVue.upload_spec_index; 
-parentVue.\$set(parentVue." . $model . "[field][index], 'img', data.url);
-
+parentVue.\$set(parentVue." . $model . "[field][index], 'image', data.url);
+parentVue.\$forceUpdate();
 ";
 $js = aes_encode($js);
 $vue->method("upload_spec(field,index)", " 
