@@ -28,9 +28,9 @@ if ($attr && is_array($attr) && in_array('status', $attr)) {
             <el-form-item label="<?= lang('SKU') ?>" required>
                 <el-input style="width:200px" v-model="<?= $model ?>.sku" type="number"></el-input>
             </el-form-item> 
-            <el-form-item label="<?= lang('市场市') ?>" required class="mt-2">
+            <!-- <el-form-item label="<?= lang('市场价') ?>" required class="mt-2">
                 <el-input style="width:200px" v-model="<?= $model ?>.price_mart" type="number"></el-input>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item label="<?= lang('售价') ?>" required class="mt-2">
                 <el-input style="width:200px" v-model="<?= $model ?>.price" type="number"></el-input>
             </el-form-item> 
