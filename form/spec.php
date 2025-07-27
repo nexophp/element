@@ -23,26 +23,29 @@ if ($attr && is_array($attr) && in_array('status', $attr)) {
         <el-radio @change="spec_change()" v-model="<?= $model ?>.<?= $select_name ?>" label="1"><?= lang('单规格') ?></el-radio>
         <el-radio @change="spec_change()" style="margin-left: 10px;" v-model="<?= $model ?>.<?= $select_name ?>" label="2"><?= lang('多规格') ?></el-radio>
     </div>
-    <div v-if="<?= $model ?>.<?= $select_name ?> == 1">
-        <el-form label-position="top" @submit.native.prevent label-width="180px" style="padding-right:20px;">
-            <el-form-item label="<?= lang('划线价') ?>" required>
+    <div v-if="<?= $model ?>.<?= $select_name ?> == 1" class="mt-3">
+        <el-form label-position="left" @submit.native.prevent label-width="180px" style="padding-right:20px;">
+            <el-form-item label="<?= lang('SKU') ?>" required>
+                <el-input style="width:200px" v-model="<?= $model ?>.sku" type="number"></el-input>
+            </el-form-item> 
+            <el-form-item label="<?= lang('市场市') ?>" required class="mt-2">
                 <el-input style="width:200px" v-model="<?= $model ?>.price_mart" type="number"></el-input>
             </el-form-item>
-            <el-form-item label="<?= lang('销售价') ?>" required>
+            <el-form-item label="<?= lang('售价') ?>" required class="mt-2">
                 <el-input style="width:200px" v-model="<?= $model ?>.price" type="number"></el-input>
-            </el-form-item>
-            <?php if ($is_stock) { ?>
-                <el-form-item label="<?= lang('库存') ?>" required>
-                    <el-input style="width:200px" v-model="<?= $model ?>.stock" type="number"></el-input>
-                </el-form-item>
-            <?php } ?>
+            </el-form-item> 
+            <el-form-item label="<?= lang('库存') ?>" required class="mt-2">
+                <el-input style="width:200px" v-model="<?= $model ?>.stock" type="number"></el-input>
+            </el-form-item> 
+            
         </el-form>
     </div>
 
-    <table v-if="<?= $model ?>.<?= $select_name ?> == 2" style="width:100%;margin-top:5px;" class="table table-bordered">
+    <table v-if="<?= $model ?>.<?= $select_name ?> == 2" style="width:100%;" class="table table-bordered mt-3">
         <thead>
             <tr>
-                <th><?= lang('规格名') ?>(<span @click="push_spec()" class="hand link">+</span>)</th>
+                <th><?= lang('规格名') ?><span @click="push_spec()" class="ms-2 hand link bi bi-plus-circle"></span></th>
+                <th><?= lang('SKU') ?></th>
                 <?php if ($is_image) { ?><th><?= lang('图片') ?></th><?php } ?>
                 <th><?= lang('价格') ?></th>
                 <?php if ($is_stock) { ?><th><?= lang('库存') ?></th><?php } ?>
@@ -55,6 +58,12 @@ if ($attr && is_array($attr) && in_array('status', $attr)) {
                 <td>
                     <el-input style="width:200px;" size="small" 
                         v-model="<?= $model ?>.<?= $name ?>[index].title"
+                        @input="$forceUpdate()">
+                    </el-input>
+                </td>
+                <td>
+                    <el-input style="width:200px;" size="small" 
+                        v-model="<?= $model ?>.<?= $name ?>[index].sli"
                         @input="$forceUpdate()">
                     </el-input>
                 </td>
@@ -71,13 +80,13 @@ if ($attr && is_array($attr) && in_array('status', $attr)) {
                     </td>
                 <?php } ?>
                 <td>
-                    <el-input style="width:200px;" size="small" type="number"
+                    <el-input style="width:100px;" size="small" type="number"
                         v-model="<?= $model ?>.<?= $name ?>[index].price"
                         @input="$forceUpdate()"></el-input>
                 </td>
                 <?php if ($is_stock) { ?>
                     <td>
-                        <el-input style="width:200px;" size="small" type="number"
+                        <el-input style="width:100px;" size="small" type="number"
                             v-model="<?= $model ?>.<?= $name ?>[index].stock"
                             @input="$forceUpdate()" style="width: 100px;"></el-input>
                     </td>
