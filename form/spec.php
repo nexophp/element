@@ -19,11 +19,11 @@ if ($attr && is_array($attr) && in_array('status', $attr)) {
 } 
 ?>
 <el-form-item label="<?= $label ?>">
-    <div style="display: flex;margin-top: 15px;">
+    <div style="display: flex;margin-top: 15px;" v-if="!<?= $model ?>.id" class="mb-3">
         <el-radio @change="spec_change()" v-model="<?= $model ?>.<?= $select_name ?>" label="1"><?= lang('单规格') ?></el-radio>
         <el-radio @change="spec_change()" style="margin-left: 10px;" v-model="<?= $model ?>.<?= $select_name ?>" label="2"><?= lang('多规格') ?></el-radio>
     </div>
-    <div v-if="<?= $model ?>.<?= $select_name ?> == 1" class="mt-3">
+    <div v-if="<?= $model ?>.<?= $select_name ?> == 1" >
         <el-form label-position="left" @submit.native.prevent label-width="180px" style="padding-right:20px;">
             <el-form-item label="<?= lang('SKU') ?>" required>
                 <el-input style="width:200px" v-model="<?= $model ?>.sku" type="number"></el-input>
@@ -41,7 +41,7 @@ if ($attr && is_array($attr) && in_array('status', $attr)) {
         </el-form>
     </div>
 
-    <table v-if="<?= $model ?>.<?= $select_name ?> == 2" style="width:100%;" class="table table-bordered mt-3">
+    <table v-if="<?= $model ?>.<?= $select_name ?> == 2" style="width:100%;" class="table table-bordered ">
         <thead>
             <tr>
                 <th><?= lang('规格名') ?><span @click="push_spec()" class="ms-2 hand link bi bi-plus-circle"></span></th>
