@@ -23,17 +23,17 @@ class base
         unset($arr['url']);
         $ele = $arr['data'] ?? '';
         unset($arr['data']);
-        $method = 'load_filter_' . $ele;
-        $where  = 'filter_' . $ele;
-        $total  = 'filter_total_' . $ele;
+        $method = 'load_' . $ele;
+        $where  = 'where_' . $ele;
+        $total  = 'total_' . $ele;
         $reload_filter = [];
         if ($reload_data) {
             if (is_array($reload_data)) {
                 foreach ($reload_data as $_re) {
-                    $reload_filter[] = 'load_filter_' . $_re;
+                    $reload_filter[] = 'load_' . $_re;
                 }
             } else {
-                $reload_filter[] = 'load_filter_' . $reload_data;
+                $reload_filter[] = 'load_' . $reload_data;
             }
         }
         if ($filter_pager == 'filter') {
