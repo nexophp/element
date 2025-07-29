@@ -18,7 +18,7 @@ if ($attr && is_array($attr) && in_array('status', $attr)) {
     $is_status = true;
 } 
 ?>
-<el-form-item label="<?= $label ?>">
+<el-form-item label="<?= $label ?>" required>
     <div style="display: flex;margin-top: 15px;" v-if="!<?= $model ?>.id" class="mb-3">
         <el-radio @change="spec_change()" v-model="<?= $model ?>.<?= $select_name ?>" label="1"><?= lang('单规格') ?></el-radio>
         <el-radio @change="spec_change()" style="margin-left: 10px;" v-model="<?= $model ?>.<?= $select_name ?>" label="2"><?= lang('多规格') ?></el-radio>
