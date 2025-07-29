@@ -50,6 +50,7 @@ if ($attr && is_array($attr) && in_array('status', $attr)) {
                 <th><?= lang('价格') ?></th>
                 <?php if ($is_stock) { ?><th><?= lang('库存') ?></th><?php } ?>
                 <?php if ($is_status) { ?><th style="width:50px;"><?= lang('状态') ?></th><?php } ?>
+                <th style="width:50px;"><?= lang('默认') ?></th>
                 <th style="width:50px;"><?= lang('操作') ?></th>
             </tr>
         </thead>
@@ -98,6 +99,11 @@ if ($attr && is_array($attr) && in_array('status', $attr)) {
                         </el-switch>
                     </td>
                 <?php } ?>
+                <td>
+                    <el-switch @change="spec_is_default_change(index)" size="small" v-model="<?= $model ?>.<?= $name ?>[index].is_default" active-value="1"
+                        inactive-value="-1" active-color="#13ce66" inactive-color="#ff4949">
+                    </el-switch>
+                </td>
                 <td>
                     <el-button type="danger" size="small" @click="del_spec(index)" icon="el-icon-delete"
                         circle></el-button>
@@ -159,5 +165,13 @@ $vue->method("upload_spec(field,index)", "
         area: ['90%', '80%'],
         content: '/admin/media/index?js=" . $js . "'
     });
+");
+$vue->method("spec_is_default_change(index)"," 
+    let val = app.{$model}.{$name}[index].is_default;
+    //其他的先变成 0 
+    app.{$model}.{$name}.forEach((item,index) => {
+        item.is_default = 0;
+    }); 
+    app.{$model}.{$name}[index].is_default = val;
 ");
 ?>
