@@ -216,7 +216,7 @@ class form
     public static function open($arr = [])
     {
         unset($arr['model'], $arr['name']);
-        return "<el-form " . element_to_str($arr) . ">\n";
+        return "<el-form @submit.native.prevent  " . element_to_str($arr) . ">\n";
     }
 
     public static function close()
