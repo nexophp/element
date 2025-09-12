@@ -25,8 +25,8 @@ if ($attr && is_array($attr) && in_array('status', $attr)) {
     </div>
     <div v-if="<?= $model ?>.<?= $select_name ?> == 1" >
         <el-form label-position="left" @submit.native.prevent label-width="180px" style="padding-right:20px;">
-            <el-form-item label="<?= lang('SKU') ?>" required>
-                <el-input style="width:200px" v-model="<?= $model ?>.sku" type="number"></el-input>
+            <el-form-item label="<?= lang('商品唯一码') ?>" required>
+                <el-input style="width:200px" v-model="<?= $model ?>.sku" ></el-input>
             </el-form-item> 
             <!-- <el-form-item label="<?= lang('市场价') ?>" required class="mt-2">
                 <el-input style="width:200px" v-model="<?= $model ?>.price_mart" type="number"></el-input>
@@ -45,7 +45,7 @@ if ($attr && is_array($attr) && in_array('status', $attr)) {
         <thead>
             <tr>
                 <th><?= lang('规格名') ?><span @click="push_spec()" class="ms-2 hand link bi bi-plus-circle"></span></th>
-                <th><?= lang('SKU') ?></th>
+                <th><?= lang('商品唯一码') ?></th>
                 <?php if ($is_image) { ?><th><?= lang('图片') ?></th><?php } ?>
                 <th><?= lang('价格') ?></th>
                 <?php if ($is_stock) { ?><th><?= lang('库存') ?></th><?php } ?>
