@@ -5,10 +5,7 @@ if (strpos($name, ',') !== false) {
     $select_name = $arr[0];
     $name = $arr[1];
 }
-$is_image = false;
-if ($attr && is_array($attr) && in_array('image', $attr)) {
-    $is_image = true;
-}
+$is_image = false; 
 $is_stock = false;
 if ($attr && is_array($attr) && in_array('stock', $attr)) {
     $is_stock = true;
@@ -34,11 +31,24 @@ if ($attr && is_array($attr) && in_array('status', $attr)) {
                 <el-button @click="remove_spec_name(specIndex)" type="danger" size="small" icon="el-icon-delete" class="ms-2" v-if="<?= $model ?>.spec_names.length > 1"></el-button>
             </div>
             <div class="d-flex align-items-start">
-                <label class="me-2" style="min-width: 60px; font-weight: bold; "><?= lang('规格值') ?>:</label>
+                <label class="me-2" style="min-width: 60px; font-weight: bold;"><?= lang('规格值') ?>:</label>
                 <div class="spec-values d-flex flex-wrap" style="flex: 1;">
-                    <div v-for="(value, valueIndex) in spec.values" :key="valueIndex" class="spec-value-item me-2 mb-2 d-flex align-items-center">
-                        <el-input v-model="spec.values[valueIndex]" style="width: 100px;" size="small" placeholder="<?= lang('规格值') ?>" @input="$forceUpdate()"></el-input>
-                        <el-button @click="remove_spec_value(specIndex, valueIndex)" type="text" size="small" icon="el-icon-close" class="ms-1" v-if="spec.values.length > 1" style="color: #f56c6c;"></el-button>
+                    <div v-for="(value, valueIndex) in spec.values" :key="valueIndex" class="spec-value-item me-2 mb-2">
+                        <div class="d-flex align-items-center">
+                            <el-input v-model="spec.values[valueIndex]" style="width: 100px;" size="small" placeholder="<?= lang('规格值') ?>" @input="$forceUpdate()"></el-input>
+                            <el-button @click="remove_spec_value(specIndex, valueIndex)" type="text" size="small" icon="el-icon-close" class="ms-1" v-if="spec.values.length > 1" style="color: #f56c6c;"></el-button>
+                        </div>
+                        <!-- 颜色规格值图片上传 -->
+                        <div v-if="spec.name.trim() === '颜色'" class="mt-2 d-flex align-items-center">
+                            <el-image style="width: 50px; height:50px; border-radius: 4px;" v-if="spec.value_images && spec.value_images[valueIndex]"
+                                :src="spec.value_images[valueIndex]" :preview-src-list="[spec.value_images[valueIndex]]"></el-image>
+                            <div v-else style="width: 50px; height: 50px; border: 1px dashed #d9d9d9; display: flex; align-items: center; justify-content: center; border-radius: 4px;">
+                                <i class="el-icon-picture" style="color: #c0c4cc;"></i>
+                            </div>
+                            <el-button class="ms-2" size="mini" type="text" @click="upload_spec_value_image(specIndex, valueIndex)">
+                                {{ spec.value_images && spec.value_images[valueIndex] ? '<?= lang('替换') ?>' : '<?= lang('上传') ?>' }}
+                            </el-button>
+                        </div>
                     </div>
                     <el-button @click="add_spec_value(specIndex)" type="text" size="small" icon="el-icon-plus" style="color: #409eff;"><?= lang('添加值') ?></el-button>
                 </div>
@@ -54,16 +64,12 @@ if ($attr && is_array($attr) && in_array('status', $attr)) {
             <el-form-item label="<?= lang('商品唯一码') ?>" required>
                 <el-input style="width:200px" v-model="<?= $model ?>.sku"></el-input>
             </el-form-item>
-            <!-- <el-form-item label="<?= lang('市场价') ?>" required class="mt-2">
-                <el-input style="width:200px" v-model="<?= $model ?>.price_mart" type="number"></el-input>
-            </el-form-item> -->
             <el-form-item label="<?= lang('售价') ?>" required class="mt-2">
                 <el-input style="width:200px" v-model="<?= $model ?>.price" type="number"></el-input>
             </el-form-item>
             <el-form-item label="<?= lang('库存') ?>" required class="mt-2">
                 <el-input style="width:200px" v-model="<?= $model ?>.stock" type="number"></el-input>
             </el-form-item>
-
         </el-form>
     </div>
 
@@ -186,7 +192,8 @@ $vue->method("init_spec_names()", "
     if(!app.{$model}.spec_names){
         app.{$model}.spec_names = [{
             name: '',
-            values: ['']
+            values: [''],
+            value_images: []
         }];
     }
 ");
@@ -198,7 +205,8 @@ $vue->method("add_spec_name()", "
     }
     app.{$model}.spec_names.push({
         name: '',
-        values: ['']
+        values: [''],
+        value_images: []
     });
     app.\$forceUpdate();
 ");
@@ -212,6 +220,12 @@ $vue->method("remove_spec_name(specIndex)", "
 // 添加规格值
 $vue->method("add_spec_value(specIndex)", "
     app.{$model}.spec_names[specIndex].values.push('');
+    if(app.{$model}.spec_names[specIndex].name.trim() === '颜色') {
+        if(!app.{$model}.spec_names[specIndex].value_images) {
+            app.{$model}.spec_names[specIndex].value_images = [];
+        }
+        app.{$model}.spec_names[specIndex].value_images.push('');
+    }
     app.\$forceUpdate();
 ");
 
@@ -219,8 +233,34 @@ $vue->method("add_spec_value(specIndex)", "
 $vue->method("remove_spec_value(specIndex, valueIndex)", "
     if(app.{$model}.spec_names[specIndex].values.length > 1) {
         app.{$model}.spec_names[specIndex].values.splice(valueIndex, 1);
+        if(app.{$model}.spec_names[specIndex].name.trim() === '颜色' && app.{$model}.spec_names[specIndex].value_images) {
+            app.{$model}.spec_names[specIndex].value_images.splice(valueIndex, 1);
+        }
         app.\$forceUpdate();
     }
+");
+
+// 上传规格值图片
+$vue->method("upload_spec_value_image(specIndex, valueIndex)", "
+    app.upload_spec_index = specIndex;
+    app.upload_spec_value_index = valueIndex;
+    app.upload_spec_field = 'spec_names';
+    layer.open({
+        type: 2,
+        title: '" . lang('上传图片') . "',
+        area: ['90%', '80%'],
+        content: '/admin/media/index?js=" . aes_encode("
+            parent.layer.closeAll();
+            let field = parentVue.upload_spec_field;
+            let specIndex = parentVue.upload_spec_index;
+            let valueIndex = parentVue.upload_spec_value_index;
+            if(!parentVue.{$model}[field][specIndex].value_images) {
+                parentVue.\$set(parentVue.{$model}[field][specIndex], 'value_images', []);
+            }
+            parentVue.\$set(parentVue.{$model}[field][specIndex].value_images, valueIndex, data.url);
+            parentVue.\$forceUpdate();
+        ") . "'
+    });
 ");
 
 // 生成笛卡尔积规格组合
@@ -244,6 +284,19 @@ $vue->method("generate_spec_combinations()", "
         }
         // 更新有效值
         spec.values = validValues;
+        // 确保value_images数组长度与values一致
+        if(spec.name.trim() === '颜色') {
+            if(!spec.value_images) {
+                spec.value_images = new Array(validValues.length).fill('');
+            } else {
+                spec.value_images = spec.value_images.slice(0, validValues.length);
+                while(spec.value_images.length < validValues.length) {
+                    spec.value_images.push('');
+                }
+            }
+        } else {
+            delete spec.value_images;
+        }
     }
     
     // 生成笛卡尔积
@@ -251,7 +304,7 @@ $vue->method("generate_spec_combinations()", "
     
     // 生成规格组合数据
     app.{$model}.{$name} = combinations.map((combination, index) => {
-        return {
+        let combinationData = {
             spec_values: combination,
             sku: '',
             price: '',
@@ -260,6 +313,15 @@ $vue->method("generate_spec_combinations()", "
             is_default: index === 0 ? '1' : '0',
             image: ''
         };
+        // 如果包含颜色规格，添加对应的图片
+        let colorIndex = app.{$model}.spec_names.findIndex(spec => spec.name.trim() === '颜色');
+        if(colorIndex !== -1 && app.{$model}.spec_names[colorIndex].value_images) {
+            let valueIndex = app.{$model}.spec_names[colorIndex].values.indexOf(combination[colorIndex]);
+            if(valueIndex !== -1 && app.{$model}.spec_names[colorIndex].value_images[valueIndex]) {
+                combinationData.image = app.{$model}.spec_names[colorIndex].value_images[valueIndex];
+            }
+        }
+        return combinationData;
     });
     
     app.\$forceUpdate();
@@ -313,7 +375,6 @@ $vue->method("spec_change()", "
         if(!app.{$model}.{$name}) {
             app.{$model}.{$name} = [];
         }
-        // 强制更新视图以确保编辑时的数据能正确显示
         app.\$forceUpdate();
     } 
 ");
@@ -324,9 +385,10 @@ $vue->method("update_spec_field(index, field, value)", "
 ");
 
 $vue->data("upload_spec_index", '');
+$vue->data("upload_spec_value_index", '');
 $vue->data("upload_spec_field", '');
 
-$js =  "
+$js = "
 parent.layer.closeAll();
 let field = parentVue.upload_spec_field;
 let index = parentVue.upload_spec_index; 
@@ -344,12 +406,14 @@ $vue->method("upload_spec(field,index)", "
         content: '/admin/media/index?js=" . $js . "'
     });
 ");
+
 $vue->method("spec_is_default_change(index)", " 
     let val = app.{$model}.{$name}[index].is_default;
-    //其他的先变成 0 
-    app.{$model}.{$name}.forEach((item,index) => {
-        item.is_default = 0;
+    // 其他的先变成 0 
+    app.{$model}.{$name}.forEach((item, idx) => {
+        item.is_default = '0';
     }); 
     app.{$model}.{$name}[index].is_default = val;
+    app.\$forceUpdate();
 ");
 ?>
